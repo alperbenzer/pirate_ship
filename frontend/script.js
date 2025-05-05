@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     formData.append("password", password);
 
     try {
-	const res = await fetch("http://localhost:8001/login", {
+	const res = await fetch("http://pirate-api:8001/login", {
         method: "POST",
         body: formData
       });

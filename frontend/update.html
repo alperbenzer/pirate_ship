@@ -43,7 +43,7 @@
         if (status) {
           const statusData = new FormData();
           statusData.append("status", status);
-          await fetch(`http://localhost:8001/calls/${callId}/status`, {
+          await fetch(`http://pirate-api:8001/calls/${callId}/status`, {
             method: "PATCH",
             headers: { Authorization: `Bearer ${token}` },
             body: statusData
@@ -53,7 +53,7 @@
         if (doc_id) {
           const docData = new FormData();
           docData.append("doc_id", doc_id);
-          await fetch(`http://localhost:8001/calls/${callId}/doc`, {
+          await fetch(`http://pirate-api:8001/calls/${callId}/doc`, {
             method: "PATCH",
             headers: { Authorization: `Bearer ${token}` },
             body: docData
