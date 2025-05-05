@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Çağrı Detayları</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      font-size: 60%; /* %40 daha küçük */
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 1rem;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Çağrı Detayları</h1>
+    <table id="calls-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Başlık</th>
+          <th>Konu</th>
+          <th>Açıklama</th>
+          <th>Okul</th>
+          <th>Şehir</th>
+          <th>İlçe</th>
+          <th>Durum</th>
+          <th>Belge</th>
+        </tr>
+      </thead>
+      <tbody id="calls-body"></tbody>
+    </table>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const body = document.getElementById("calls-body");
+    const messageEl = document.getElementById("message");
+
+    if (!token) {
+      window.location.href = "index.html";
+    }
+
+    async function fetchCalls() {
+      try {
+        const res = await fetch("http://localhost:8001/calls", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        body.innerHTML = "";
+        data.forEach(call => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${call.id}</td>
+            <td>${call.title}</td>
+            <td>${call.subject}</td>
+            <td>${call.description}</td>
+            <td>${call.school_name}</td>
+            <td>${call.province}</td>
+            <td>${call.district}</td>
+            <td>${call.status}</td>
+            <td>${call.doc_id || "-"}</td>
+          `;
+          body.appendChild(row);
+        });
+      } catch (err) {
+        messageEl.textContent = "Çağrılar alınamadı.";
+      }
+    }
+
+    fetchCalls();
+  </script>
+</body>
+</html>
+

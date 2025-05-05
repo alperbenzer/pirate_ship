@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kayıt Güncelle</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Kayıt Güncelle</h1>
+    <form id="update-form">
+      <label for="status">Durum:</label>
+      <input type="text" id="status" name="status">
+
+      <label for="doc_id">Belge Adı:</label>
+      <input type="text" id="doc_id" name="doc_id">
+
+      <button type="submit">Güncelle</button>
+      <p id="message"></p>
+    </form>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const callId = params.get("id");
+    const token = localStorage.getItem("token");
+    const form = document.getElementById("update-form");
+    const messageEl = document.getElementById("message");
+
+    if (!token || !callId) {
+      window.location.href = "index.html";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      messageEl.textContent = "";
+
+      const status = form.status.value;
+      const doc_id = form.doc_id.value;
+
+      try {
+        if (status) {
+          const statusData = new FormData();
+          statusData.append("status", status);
+          await fetch(`http://localhost:8001/calls/${callId}/status`, {
+            method: "PATCH",
+            headers: { Authorization: `Bearer ${token}` },
+            body: statusData
+          });
+        }
+
+        if (doc_id) {
+          const docData = new FormData();
+          docData.append("doc_id", doc_id);
+          await fetch(`http://localhost:8001/calls/${callId}/doc`, {
+            method: "PATCH",
+            headers: { Authorization: `Bearer ${token}` },
+            body: docData
+          });
+        }
+
+        messageEl.textContent = "Kayıt güncellendi.";
+      } catch (err) {
+        messageEl.textContent = "Güncelleme başarısız.";
+      }
+    });
+  </script>
+</body>
+</html>
