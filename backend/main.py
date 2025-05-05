@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, status, Form
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
@@ -10,6 +11,14 @@ import httpx
 load_dotenv()
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8003"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 DATABASE = "users.db"
 os.makedirs("uploads", exist_ok=True)  # Belge yüklenmediği için bu sadece yer tutucu
