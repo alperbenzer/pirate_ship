@@ -67,7 +67,7 @@
 
     async function fetchCalls() {
       try {
-        const res = await fetch("http://localhost:8001/calls", {
+        const res = await fetch("http://pirate-api:8001/calls", {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
